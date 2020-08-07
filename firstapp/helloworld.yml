@@ -16,3 +16,6 @@ spec:
 # Commands:-
 # kubectl attach hellworld
 # kubectl exec -it helloworld -- touch /app
+# kubectl get service
+# kubectl describe service
+
