@@ -11,3 +11,8 @@ spec:
     ports:
     - name: nodejs-port
       containerPort: 3000
+
+# to attach to a node command
+# Commands:-
+# kubectl attach hellworld
+# kubectl exec -it helloworld -- touch /app
