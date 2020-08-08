@@ -1,8 +1,12 @@
-FROM bitwalker/alpine-elixir:1.7 as build
+FROM elixir:1.10-alpine as builder
 
 COPY . .
 
-RUN export MIX_ENV=prod && \
-    rm -Rf _build && \
-    mix deps.get && \
-    mix release
+RUN mix local.rebar --force && \
+    mix local.hex --if-missing --force && \
+    mix do deps.get --only $MIX_ENV, deps.compile, phx.digest
+
+RUN mix release \
+    && rm -rf /app/deps
+
+
