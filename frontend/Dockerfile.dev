@@ -16,6 +16,8 @@ CMD ["npm", "run", "start"]
 
 # docker run -it -p 3000:3000 CONTAINER_ID
 
+# docker build -f Dockerfile.dev .        
 
 # volumes
 # docker run -p 3000:3000 -v $(pwd):/app 6d2ec9257833
+# docker run -it -p 3000:3000 -v /app/node_modules -v $(pwd):/app 74332c2e5369
