@@ -1,1 +1,12 @@
 version: '3'
+
+services: 
+    redis-server: 
+        image: 'redis'
+
+    node-app: 
+        build: .
+        ports: 
+            - "8081:8081"
+
+# docker-compose up --build --> to rebuild the app. Otherwise you can remove the build part
