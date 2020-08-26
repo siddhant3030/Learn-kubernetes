@@ -22,6 +22,10 @@ CMD ["npm", "run", "start"]
 # docker run -p 3000:3000 -v $(pwd):/app 6d2ec9257833
 # docker run -it -p 3000:3000 -v /app/node_modules -v $(pwd):/app 74332c2e5369
 
+#Runnin a test here
+# docker run dockerimage CMD ["npm", "run", "start"]
+# docker run -it dockerimage npm run test
+
 
 
 # Recently, a bug was introduced with the latest Create React App version that is causing the React app to exit when starting with Docker Compose.
