@@ -10,3 +10,13 @@ services:
             - "8081:8081"
 
 # docker-compose up --build --> to rebuild the app. Otherwise you can remove the build part
+
+# docker-compose up -d
+# Starting visits_redis-server_1 ... done
+# Starting visits_node-app_1     ... done
+
+# TO stop
+# docker-compose down
+
+
+
