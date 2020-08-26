@@ -5,6 +5,7 @@ services:
         image: 'redis'
 
     node-app: 
+        restart: on-failure
         build: .
         ports: 
             - "8081:8081"
@@ -18,5 +19,10 @@ services:
 # TO stop
 # docker-compose down
 
+# Restart Policies
+# 1. no - never attempt to restart this
+# 2. always - Restart the container
+# 3. on-failure - Only restart if the container stops with an error code
+# 4. unless-stopped - Always restart unless (the developers) forciby stop it. 
 
 
