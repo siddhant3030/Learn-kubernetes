@@ -15,3 +15,7 @@ CMD ["npm", "run", "start"]
 # In the upcoming lecture, you'll need to add the -it flag to run the container in interactive mode:
 
 # docker run -it -p 3000:3000 CONTAINER_ID
+
+
+# volumes
+# docker run -p 3000:3000 -v $(pwd):/app 6d2ec9257833
