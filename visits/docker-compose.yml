@@ -26,3 +26,7 @@ services:
 # 4. unless-stopped - Always restart unless (the developers) forciby stop it. 
 
 
+# Container stats with docker compose
+# docker-compose ps
+
+
