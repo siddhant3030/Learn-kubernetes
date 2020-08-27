@@ -1,0 +1,39 @@
+FROM node:alpine
+
+WORKDIR '/app'
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "start"]
+
+# Due to a recent update in the Create React App library, we will need to change how we start our containers.
+
+# In the upcoming lecture, you'll need to add the -it flag to run the container in interactive mode:
+
+# docker run -it -p 3000:3000 CONTAINER_ID
+
+# docker build -f Dockerfile.dev .        
+
+# volumes
+# docker run -p 3000:3000 -v $(pwd):/app 6d2ec9257833
+# docker run -it -p 3000:3000 -v /app/node_modules -v $(pwd):/app 74332c2e5369
+
+#Runnin a test here
+# docker run dockerimage CMD ["npm", "run", "start"]
+# docker run -it dockerimage npm run test
+
+
+
+# Recently, a bug was introduced with the latest Create React App version that is causing the React app to exit when starting with Docker Compose.
+
+# To Resolve this:
+
+# Add stdin_open property to your docker-compose.yml file
+
+#   web:
+#     stdin_open: true
+# Make sure you rebuild your containers after making this change with  docker-compose down && docker-compose up --build
