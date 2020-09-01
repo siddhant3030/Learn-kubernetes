@@ -1,163 +1,163 @@
 Learning Kubernetes
 
-EBS Application Creation
+# EBS Application Creation
 
-Go to AWS Management Console and use Find Services to search for Elastic Beanstalk
+1. Go to AWS Management Console and use Find Services to search for Elastic Beanstalk
 
-Click “Create Application”
+2. Click “Create Application”
 
-Set Application Name to 'multi-docker'
+3. Set Application Name to 'multi-docker'
 
-Scroll down to Platform and select Docker
+4. Scroll down to Platform and select Docker
 
-In Platform Branch, select Multi-Container Docker running on 64bit Amazon Linux
+5. In Platform Branch, select Multi-Container Docker running on 64bit Amazon Linux
 
-Click Create Application
+6. Click Create Application
 
-You may need to refresh, but eventually, you should see a green checkmark underneath Health.
+7. You may need to refresh, but eventually, you should see a green checkmark underneath Health.
 
-RDS Database Creation
+# RDS Database Creation
 
-Go to AWS Management Console and use Find Services to search for RDS
+1. Go to AWS Management Console and use Find Services to search for RDS
 
-Click Create database button
+2. Click Create database button
 
-Select PostgreSQL
+3. Select PostgreSQL
 
-In Templates, check the Free tier box.
+4. In Templates, check the Free tier box.
 
-Scroll down to Settings.
+5. Scroll down to Settings.
 
-Set DB Instance identifier to multi-docker-postgres
+6. Set DB Instance identifier to multi-docker-postgres
 
-Set Master Username to postgres
+7. Set Master Username to postgres
 
-Set Master Password to postgrespassword and confirm.
+8. Set Master Password to postgrespassword and confirm.
 
-Scroll down to Connectivity. Make sure VPC is set to Default VPC
+9. Scroll down to Connectivity. Make sure VPC is set to Default VPC
 
-Scroll down to Additional Configuration and click to unhide.
+10. Scroll down to Additional Configuration and click to unhide.
 
-Set Initial database name to fibvalues
+11. Set Initial database name to fibvalues
 
-Scroll down and click Create Database button
+12. Scroll down and click Create Database button
 
-ElastiCache Redis Creation
+# ElastiCache Redis Creation
 
-Go to AWS Management Console and use Find Services to search for ElastiCache
+1. Go to AWS Management Console and use Find Services to search for ElastiCache
 
-Click Redis in sidebar
+2. Click Redis in sidebar
 
-Click the Create button
+3. Click the Create button
 
-Make sure Cluster Mode Enabled is NOT ticked
+4. Make sure Cluster Mode Enabled is NOT ticked
 
-In Redis Settings form, set Name to multi-docker-redis
+5. In Redis Settings form, set Name to multi-docker-redis
 
-Change Node type to 'cache.t2.micro'
+6. Change Node type to 'cache.t2.micro'
 
-Change Replicas per Shard to 0
+7. Change Replicas per Shard to 0
 
-Scroll down and click Create button
+8. Scroll down and click Create button
 
-Creating a Custom Security Group
+# Creating a Custom Security Group
 
-Go to AWS Management Console and use Find Services to search for VPC
+1. Go to AWS Management Console and use Find Services to search for VPC
 
-Find the Security section in the left sidebar and click Security Groups
+2. Find the Security section in the left sidebar and click Security Groups
 
-Click Create Security Group button
+3. Click Create Security Group button
 
-Set Security group name to multi-docker
+4. Set Security group name to multi-docker
 
-Set Description to multi-docker
+5. Set Description to multi-docker
 
-Make sure VPC is set to default VPC
+6. ake sure VPC is set to default VPC
 
-Click Create Button
+7. Click Create Button
 
-Scroll down and click Inbound Rules
+8. Scroll down and click Inbound Rules
 
-Click Edit Rules button
+9. Click Edit Rules button
 
-Click Add Rule
+10. Click Add Rule
 
-Set Port Range to 5432-6379
+11. Set Port Range to 5432-6379
 
-Click in the box next to Source and start typing 'sg' into the box. Select the Security Group you just created.
+12. Click in the box next to Source and start typing 'sg' into the box. Select the Security Group you just created.
 
-Click Create Security Group
+13. Click Create Security Group
 
-Applying Security Groups to ElastiCache
+# Applying Security Groups to ElastiCache
 
-Go to AWS Management Console and use Find Services to search for ElastiCache
+1. Go to AWS Management Console and use Find Services to search for ElastiCache
 
-Click Redis in Sidebar
+2. Click Redis in Sidebar
 
-Check the box next to Redis cluster
+3. Check the box next to Redis cluster
 
-Click Actions and click Modify
+4. Click Actions and click Modify
 
-Click the pencil icon to edit the VPC Security group. Tick the box next to the new multi-docker group and click Save
+5. Click the pencil icon to edit the VPC Security group. Tick the box next to the new multi-docker group and click Save
 
-Click Modify
+6. Click Modify
 
-Applying Security Groups to RDS
+# Applying Security Groups to RDS
 
-Go to AWS Management Console and use Find Services to search for RDS
+8. Go to AWS Management Console and use Find Services to search for RDS
 
-Click Databases in Sidebar and check the box next to your instance
+9. Click Databases in Sidebar and check the box next to your instance
 
-Click Modify button
+10. Click Modify button
 
-Scroll down to Network and Security and add the new multi-docker security group
+11. Scroll down to Network and Security and add the new multi-docker security group
 
-Scroll down and click Continue button
+12. Scroll down and click Continue button
 
-Click Modify DB instance button
+13. Click Modify DB instance button
 
-Applying Security Groups to Elastic Beanstalk
+# Applying Security Groups to Elastic Beanstalk
 
-Go to AWS Management Console and use Find Services to search for Elastic Beanstalk
+1. Go to AWS Management Console and use Find Services to search for Elastic Beanstalk
 
-Click Environments in the left sidebar.
+2. Click Environments in the left sidebar.
 
-Click MultiDocker-env
+3. Click MultiDocker-env
 
-Click Configuration
+4. Click Configuration
 
-In the Instances row, click the Edit button.
+5. In the Instances row, click the Edit button.
 
-Scroll down to EC2 Security Groups and tick box next to multi-docker
+6. Scroll down to EC2 Security Groups and tick box next to multi-docker
 
-Click Apply and Click Confirm
+7. Click Apply and Click Confirm
 
-After all the instances restart and go from No Data to Severe, you should see a green checkmark under Health.
+8. After all the instances restart and go from No Data to Severe, you should see a green checkmark under Health.
 
 
 
-Add AWS configuration details to .travis.yml file's deploy script
+# Add AWS configuration details to .travis.yml file's deploy script
 
-Set the region. The region code can be found by clicking the region in the toolbar next to your username.
+1. Set the region. The region code can be found by clicking the region in the toolbar next to your username.
 eg: 'us-east-1'
 
-app should be set to the EBS Application Name
+2. app should be set to the EBS Application Name
 eg: 'multi-docker'
 
-env should be set to your EBS Environment name.
+3. env should be set to your EBS Environment name.
 eg: 'MultiDocker-env'
 
-Set the bucket_name. This can be found by searching for the S3 Storage service. Click the link for the elasticbeanstalk bucket that matches your region code and copy the name.
+4. Set the bucket_name. This can be found by searching for the S3 Storage service. Click the link for the elasticbeanstalk bucket that matches your region code and copy the name.
 
-eg: 'elasticbeanstalk-us-east-1-923445599289'
+5. eg: 'elasticbeanstalk-us-east-1-923445599289'
 
-Set the bucket_path to 'docker-multi'
+6. Set the bucket_path to 'docker-multi'
 
-Set access_key_id to $AWS_ACCESS_KEY
+7. Set access_key_id to $AWS_ACCESS_KEY
 
-Set secret_access_key to $AWS_SECRET_KEY
+8. Set secret_access_key to $AWS_SECRET_KEY
 
-Setting Environment Variables
+# Setting Environment Variables
 
 Go to AWS Management Console and use Find Services to search for Elastic Beanstalk
 
@@ -193,11 +193,11 @@ Click Apply button
 
 After all instances restart and go from No Data, to Severe, you should see a green checkmark under Health.
 
-IAM Keys for Deployment
+# IAM Keys for Deployment
 
 You can use the same IAM User's access and secret keys from the single container app we created earlier.
 
-AWS Keys in Travis
+# AWS Keys in Travis
 
 Go to your Travis Dashboard and find the project repository for the application we are working on.
 
@@ -207,7 +207,7 @@ Create an AWS_ACCESS_KEY variable and paste your IAM access key
 
 Create an AWS_SECRET_KEY variable and paste your IAM secret key
 
-Deploying App
+# Deploying App
 
 Make a small change to your src/App.js file in the greeting text.
 
