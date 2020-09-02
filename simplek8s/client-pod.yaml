@@ -16,6 +16,7 @@ spec:
 # kubectl apply -f client-pod.yaml   
 # kubectl get pods 
 # kubectl get services
+# kubectl delete -f <config file>
 
 # config file used to create object
 # 1. StatefulSet 2. ReplicaController 3. Pod 4. Service
