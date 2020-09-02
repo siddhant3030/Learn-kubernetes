@@ -23,3 +23,12 @@ spec:
 # 4. Ingress
 
 # labels-selector
+
+# SOME IMPORTANT POINTS
+# 1. kubernetes is a system to deploy containerized apps
+# 2. Nodes are individual machine that run containers.
+# 3. Masters are machines with a set of program to manage Nodes
+# 4. Kubernetes didn't build our images - it got them from somewhere else
+# 5. Kubernetes (the master) decided to run each other - each nodecan run a dissimlar of containers. 
+# 6. To deploy something we update the desired state of the master with a config file
+# 7. The master work constantly to meet your desired state. 
