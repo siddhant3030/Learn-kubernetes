@@ -10,3 +10,17 @@ spec:
           nodePort: 31515
     selector: 
         component: web
+
+# How to update the image in kubernetes when your image build has change?
+# - Tag built images with a real version number and specify the version in the config file but adds an extra step in the production deployment process
+# - Use an imperative command to update the image version th deployment should use. Uses an imperative command. 
+
+# update image version
+# 1. Tag the image with a version number, push to docker hub
+# 2. Run a kubectl command forcing the deployment to use the image new version
+
+# Imperative command to update image
+# kubectl set image deployment/dclient-deployment client=stephengrider/multi-client:v5
+
+# Configure the VM to use your docker server
+# eval $(minikube docker-env)
