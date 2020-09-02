@@ -12,8 +12,16 @@ spec:
             - containerPort: 3000
 
 
+# commands
+# kubectl apply -f client-pod.yaml   
+# kubectl get pods 
+# kubectl get services
+
 # config file used to create object
 # 1. StatefulSet 2. ReplicaController 3. Pod 4. Service
+
+# kubectl get pods  
+# kubectl get services
 
 # Services
 
@@ -32,3 +40,27 @@ spec:
 # 5. Kubernetes (the master) decided to run each other - each nodecan run a dissimlar of containers. 
 # 6. To deploy something we update the desired state of the master with a config file
 # 7. The master work constantly to meet your desired state. 
+
+# Imperative deployment
+# 1. Run a command to list out current running pods
+# 2. Run a command to update the current pod to use a new image
+
+# Declarative deployment
+# 1. Update our config file that originally created the pod
+# 2. Throw the updated config file into kubectl
+
+# Limitation in declarative deployment
+
+# The Pod "client-pod" is invalid: spec: Forbidden: 
+#     pod updates may not change fields other than `spec.containers[*].image`, `spec.initContainers[*].image`, `spec.activeDeadlineSeconds` or `spec.tolerations` (only additions to existing tolerations)
+
+
+# Pods
+# 1. Runs a single set of containers
+# 2. Good for one of dev purposes
+# 3. Rarely used directly in production
+
+#deployment 
+# 1. Runs a set of identical pods(one or more)
+# 2. Monitors the state of each pod, updating as necessary
+# 3. Good for both dev and production
