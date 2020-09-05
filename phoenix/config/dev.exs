@@ -4,7 +4,7 @@ use Mix.Config
 config :phoenix, Phoenix.Repo,
   username: "postgres",
   password: "postgres",
-  database: "phoenix_dev",
+  database: "phoenix",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
