@@ -8,3 +8,8 @@ spec:
     image: siddhant777/hello:v1
     imagePullPolicy: IfNotPresent
 
+# skaffold build
+# skaffold run
+# skaffold run --tail
+# skaffold dev 
+# skaffold build -p cloud-build
