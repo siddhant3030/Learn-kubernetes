@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta7
+kind: Config
+metadata:
+  name: learn-kubernetes
+build:
+  artifacts:
+  - image: mongo
+    context: complex/client
+  - image: mongo-express
+  - image: stephengrider/multi-client
+    context: complex/client
+    docker:
+      dockerfile: Dockerfile.dev
+  - image: wardviaene/k8s-demo
+    context: complex/nginx
+deploy:
+  kubectl:
+    manifests:
+    - mongo-configmap.yaml
+    - mongo-express.yaml
+    - mongo-secret.yaml
+    - mongo.yaml
+    - firstapp/helloworld-nodeport-service.yml
+    - firstapp/helloworld-service.yml
+    - firstapp/helloworld.yml
+    - replication_controller/hellworld-repl-controller.yml
+    - simplek8s/client-deployment.yaml
+    - simplek8s/client-node-port.yaml
+    - simplek8s/client-pod.yaml
