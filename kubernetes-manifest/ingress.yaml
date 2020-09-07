@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traffic-router
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: frontend-service
+              servicePort: 4001
+          - path: /vote
+            backend:
+                serviceName: voting-service
+                servicePort: 4002
