@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2beta7
+kind: Config
+metadata:
+  name: go
+build:
+  artifacts:
+  - image: siddhant777/hello
+deploy:
+  kubectl:
+    manifests:
+    - pod.yaml

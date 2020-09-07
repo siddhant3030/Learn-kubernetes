@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello
+spec:
+  containers:
+  - name: hello
+    image: siddhant777/hello:v1
+    imagePullPolicy: IfNotPresent
+
