@@ -3,7 +3,7 @@ const os = require('os')
 
 const app = express()
 app.get('/', (req, res) => {
-    res.send(`Hi from ${os.hostname()}`)
+    res.send(`Hello from ${os.hostname()}`)
 })
 
 const port = 3000
