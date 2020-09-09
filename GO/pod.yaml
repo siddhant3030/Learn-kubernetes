@@ -7,6 +7,7 @@ spec:
   - name: hello
     image: siddhant777/hello:v1
     imagePullPolicy: IfNotPresent
+  nodeName: worker2-control-plane
 
 # skaffold build
 # skaffold run
