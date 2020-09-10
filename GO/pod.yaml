@@ -7,10 +7,310 @@ spec:
   - name: hello
     image: siddhant777/hello:v1
     imagePullPolicy: IfNotPresent
-  nodeName: worker2-control-plane
-
+  
 # skaffold build
 # skaffold run
 # skaffold run --tail
 # skaffold dev 
 # skaffold build -p cloud-build
+
+
+
+# High level stuff
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:24:45] C:1
+# $ kubectl get pods         
+# NAME    READY   STATUS    RESTARTS   AGE
+# hello   0/1     Pending   0          90s
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:24:58] 
+# $ kubectl delete hellp
+# error: resource(s) were provided, but no name, label selector, or --all flag specified
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:25:09] C:1
+# $ kubectl delete hello
+# error: resource(s) were provided, but no name, label selector, or --all flag specified
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:25:11] C:1
+# $ kubectl get pods    
+# NAME    READY   STATUS    RESTARTS   AGE
+# hello   0/1     Pending   0          115s
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:25:23] 
+# $ kubectl delete pod hello
+# pod "hello" deleted
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:26:03] 
+# $ kubectl apply -f pod.yaml
+# pod/hello created
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:26:11] 
+# $ kubectl get pods -o wide 
+# NAME    READY   STATUS              RESTARTS   AGE   IP       NODE                   NOMINATED NODE   READINESS GATES
+# hello   0/1     ContainerCreating   0          8s    <none>   worker-control-plane   <none>           <none>
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:26:18] 
+# $ kubectl get node
+# NAME                   STATUS   ROLES    AGE     VERSION
+# worker-control-plane   Ready    master   3h26m   v1.18.2
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:26:34] 
+# $ kubectl get events
+# LAST SEEN   TYPE      REASON                    OBJECT                      MESSAGE
+# <unknown>   Normal    Scheduled                 pod/hello                   Successfully assigned default/hello to worker-control-plane
+# 79s         Normal    Pulling                   pod/hello                   Pulling image "siddhant777/hello:v1"
+# 43s         Normal    Pulled                    pod/hello                   Successfully pulled image "siddhant777/hello:v1"
+# 42s         Normal    Created                   pod/hello                   Created container hello
+# 42s         Normal    Started                   pod/hello                   Started container hello
+# 3h24m       Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 3h23m       Warning   readOnlySysFS             node/worker-control-plane   CRI error: /sys is read-only: cannot modify conntrack limits, problems may arise later (If running Docker, see docker issue #24000)
+# 3h23m       Normal    Starting                  node/worker-control-plane   Starting kube-proxy.
+# 3h23m       Normal    NodeReady                 node/worker-control-plane   Node worker-control-plane status is now: NodeReady
+# 3h22m       Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 3h20m       Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 3h17m       Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 3h14m       Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 3h8m        Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 3h1m        Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 174m        Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 155m        Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 142m        Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 30m         Normal    Starting                  node/worker-control-plane   Starting kubelet.
+# 30m         Normal    NodeHasSufficientMemory   node/worker-control-plane   Node worker-control-plane status is now: NodeHasSufficientMemory
+# 30m         Normal    NodeHasNoDiskPressure     node/worker-control-plane   Node worker-control-plane status is now: NodeHasNoDiskPressure
+# 30m         Normal    NodeHasSufficientPID      node/worker-control-plane   Node worker-control-plane status is now: NodeHasSufficientPID
+# 30m         Normal    NodeAllocatableEnforced   node/worker-control-plane   Updated Node Allocatable limit across pods
+# 30m         Warning   readOnlySysFS             node/worker-control-plane   CRI error: /sys is read-only: cannot modify conntrack limits, problems may arise later (If running Docker, see docker issue #24000)
+# 30m         Normal    Starting                  node/worker-control-plane   Starting kube-proxy.
+# 29m         Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 16m         Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 12m         Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 7m23s       Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+# 2m17s       Normal    RegisteredNode            node/worker-control-plane   Node worker-control-plane event: Registered Node worker-control-plane in Controller
+
+# # siddhant @ Siddhants-MacBook-Pro in ~/Documents/Learn-kubernetes/GO on git:master x [7:27:31] 
+# $ docker exec -it  worker-control-plane bash
+# root@worker-control-plane:/# ls 
+# bin  boot  build  dev  etc  home  kind  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+# root@worker-control-plane:/# cd /etc/kubernetes/manifests
+# root@worker-control-plane:/etc/kubernetes/manifests# ls
+# etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml
+# root@worker-control-plane:/etc/kubernetes/manifests# cat kube-scheduler.yaml
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   creationTimestamp: null
+#   labels:
+#     component: kube-scheduler
+#     tier: control-plane
+#   name: kube-scheduler
+#   namespace: kube-system
+# spec:
+#   containers:
+#   - command:
+#     - kube-scheduler
+#     - --authentication-kubeconfig=/etc/kubernetes/scheduler.conf
+#     - --authorization-kubeconfig=/etc/kubernetes/scheduler.conf
+#     - --bind-address=127.0.0.1
+#     - --kubeconfig=/etc/kubernetes/scheduler.conf
+#     - --leader-elect=true
+#     image: k8s.gcr.io/kube-scheduler:v1.18.2
+#     imagePullPolicy: IfNotPresent
+#     livenessProbe:
+#       failureThreshold: 8
+#       httpGet:
+#         host: 127.0.0.1
+#         path: /healthz
+#         port: 10259
+#         scheme: HTTPS
+#       initialDelaySeconds: 15
+#       timeoutSeconds: 15
+#     name: kube-scheduler
+#     resources:
+#       requests:
+#         cpu: 100m
+#     volumeMounts:
+#     - mountPath: /etc/kubernetes/scheduler.conf
+#       name: kubeconfig
+#       readOnly: true
+#   hostNetwork: true
+#   priorityClassName: system-cluster-critical
+#   volumes:
+#   - hostPath:
+#       path: /etc/kubernetes/scheduler.conf
+#       type: FileOrCreate
+#     name: kubeconfig
+# status: {}
+# root@worker-control-plane:/etc/kubernetes/manifests# kubectl can-i list
+# Error: unknown command "can-i" for "kubectl"
+# Run 'kubectl --help' for usage.
+# root@worker-control-plane:/etc/kubernetes/manifests# kubectl auth can-i list
+# error: you must specify two or three arguments: verb, resource, and optional resourceName
+# root@worker-control-plane:/etc/kubernetes/manifests# kubectl auth can-i --list
+# error: Missing or incomplete configuration info.  Please point to an existing, complete config file:
+
+#   1. Via the command-line flag --kubeconfig
+#   2. Via the KUBECONFIG environment variable
+#   3. In your home directory as ~/.kube/config
+
+# To view or setup config directly use the 'config' command.
+# root@worker-control-plane:/etc/kubernetes/manifests# export KUBECONFIG=/etc/kubernetes/scheduler.conf
+# root@worker-control-plane:/etc/kubernetes/manifests# kubectl auth can-i --list
+# Resources                                       Non-Resource URLs   Resource Names     Verbs
+# events                                          []                  []                 [create patch update]
+# events.events.k8s.io                            []                  []                 [create patch update]
+# bindings                                        []                  []                 [create]
+# endpoints                                       []                  []                 [create]
+# pods/binding                                    []                  []                 [create]
+# tokenreviews.authentication.k8s.io              []                  []                 [create]
+# selfsubjectaccessreviews.authorization.k8s.io   []                  []                 [create]
+# selfsubjectrulesreviews.authorization.k8s.io    []                  []                 [create]
+# subjectaccessreviews.authorization.k8s.io       []                  []                 [create]
+# leases.coordination.k8s.io                      []                  []                 [create]
+# pods                                            []                  []                 [delete get list watch]
+# persistentvolumeclaims                          []                  []                 [get list watch get list patch update watch]
+# persistentvolumes                               []                  []                 [get list watch get list patch update watch]
+# nodes                                           []                  []                 [get list watch]
+# replicationcontrollers                          []                  []                 [get list watch]
+# services                                        []                  []                 [get list watch]
+# replicasets.apps                                []                  []                 [get list watch]
+# statefulsets.apps                               []                  []                 [get list watch]
+# replicasets.extensions                          []                  []                 [get list watch]
+# poddisruptionbudgets.policy                     []                  []                 [get list watch]
+# csinodes.storage.k8s.io                         []                  []                 [get list watch]
+# storageclasses.storage.k8s.io                   []                  []                 [get list watch]
+# endpoints                                       []                  [kube-scheduler]   [get update]
+# leases.coordination.k8s.io                      []                  [kube-scheduler]   [get update]
+#                                                 [/api/*]            []                 [get]
+#                                                 [/api]              []                 [get]
+#                                                 [/apis/*]           []                 [get]
+#                                                 [/apis]             []                 [get]
+#                                                 [/healthz]          []                 [get]
+#                                                 [/healthz]          []                 [get]
+#                                                 [/livez]            []                 [get]
+#                                                 [/livez]            []                 [get]
+#                                                 [/openapi/*]        []                 [get]
+#                                                 [/openapi]          []                 [get]
+#                                                 [/readyz]           []                 [get]
+#                                                 [/readyz]           []                 [get]
+#                                                 [/version/]         []                 [get]
+#                                                 [/version/]         []                 [get]
+#                                                 [/version]          []                 [get]
+#                                                 [/version]          []                 [get]
+# pods/status                                     []                  []                 [patch update]
+# root@worker-control-plane:/etc/kubernetes/manifests# 
+
+
+# How api server sign-in
+
+
+# kubectl config view --flatten
+# apiVersion: v1
+# clusters:
+# - cluster:
+#     certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJd01Ea3dPVEl5TWprd05Gb1hEVE13TURrd056SXlNamt3TkZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTG5TCjEzOTVOVlBqNy9jcEV1R1ZTcUt6THBtSHZPSnlZVC9iOUIrbzdoZmhTc1BrMFp6TDhkUm40aGVFUVZjN3Jzb04KZVJNaStaVHZqMmdzSlJFR3hSNXh2N2F0ZkdqMnhqaWNjSm90blR1S2plTCtISWEvdGsvak9TTmt5aFpnQmlGTQpVYTdHT0xwNmw5UTRnUlRHcDMzVEVRNlJycXpqcG5mU1M5bGtlc202eWNZTW4rVXNLZXF4cjUyVWhxTzNqYkFCCkRNUzVYRnBaVldYUURUVlFCcVNWVm0rQlBxZmxEU1RHNHFwTFZ3ZWNJM0pOZkZWSkxLNE54LzR3ZGdVWldCajUKYlZSVDFjS1RMb2hWejhMS2N0ejVuK1c0czdXRFRJZUk2MEZQNHR6aE14THMvYU45UGdYbmdBWjAyN1J3YnltWApJS25yYmNaU3hoSGlzVWhidi9VQ0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFMRlM4RDA3VU9mL2Z5TEZQRytFQ3h6OXNNWW8KdHo4dUw2Y2ZUMUhncGFRRUc0cnUzR1lkbmU0UGc2enBYSk9BNXNZUUs5YncrOWF6dGszVzN1bmhyUGF0TE5sYgpIT1J0OWNJa0MzSkNLcW8yRnpYK010WDZRVmlRRTl1a1h2NlZ5ckxwSjJsUEpWVVRtVEdtbDNhc2dZVlFUMlZtCjZaelhERmdOOVNadHFRY0trSU9mK290WXVabFJVL1hrNlZmeElKc2hLQUkzUUhjekJacllCRmRkLy8wMExNNVIKT1VYVDh5MDQzNGdjYWlUMjdhd0hJSGUyYTFkZHM0ZmpoT0ZuTlcwa282MkVyTkZuN1Y2SDJyYnZPaUtPdGhrZwpqZTFBTWc0L0JoSDljWm5OVG50TCthTW51dHc2K3F4bE9Razh6WE9DWGFENkI2T0k2ZXo3Wjh1KzFxMD0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+#     server: https://worker-control-plane:6443
+#   name: worker
+# contexts:
+# - context:
+#     cluster: worker
+#     user: system:kube-scheduler
+#   name: system:kube-scheduler@worker
+# current-context: system:kube-scheduler@worker
+# kind: Config
+# preferences: {}
+# users:
+# - name: system:kube-scheduler
+#   user:
+#     client-certificate-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMzakNDQWNhZ0F3SUJBZ0lJSExuR2tYakRvTmd3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TURBNU1Ea3lNakk1TURSYUZ3MHlNVEE1TURreU1qSTVNRGhhTUNBeApIakFjQmdOVkJBTVRGWE41YzNSbGJUcHJkV0psTFhOamFHVmtkV3hsY2pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCCkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUpvVFJHaFZYSGZWSkEvcSsyN3h0REJTWWtuSlA0RDdEUUh0cVpDOUNpSkMKSEo0dzhzTkVGbXZ4TlhaSWpVWjJuaUt6Sk5qQ0REeTJldkRrOTJZS3VwM1JKWk9La2RBQkZudzZ6dzkzWi9YZwpiR0pEbU9ndkV4VXBlbHc5bzRKMGtQaTJIL3NCVmFBN3lBWTdLajhtdkdsYW15QXI3RTNOdHBRbjd5SWw2azZVCmhKdjhKaVgwK2p6UVUxRmFkZFBid0oxcU42VXlxOUFRT1c0Si90N3liMDhLZFlwbThBZll6aXU3Snh0ZkNmWXIKNUhkNDFGK1lvb29uMmZvUm1VVzhWZ05heElLbVRvTGw2ZkhQSE5WTHFLdmN0WkpZN1FEWGhRTGFPV0d4SkhPbAp4ZkpkZWhEbmpvZ2hLZEg4clVGREcwUXU3cWU3QWlSR2tlekV4M0dFU2ZrQ0F3RUFBYU1uTUNVd0RnWURWUjBQCkFRSC9CQVFEQWdXZ01CTUdBMVVkSlFRTU1Bb0dDQ3NHQVFVRkJ3TUNNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUIKQVFCbjFqLzlucTFKb1RjOHF5cmhCZ0xtZ00yYzNGL2ZhUWJNR3JlNEl2NWZYbkdZckNrWENPdll2YnJqLzQzVQpjdENXRlQyVTN5RUVkYVFvSUg5eWhJRHdpK2dxR3B1bjF3UWV6c2F1VC9ycVhibGZ1VlhCL2dia1B3TDFkREJlCndVZ04rWmEzcDJxWFVhbTh1VXJyOEhVanZpRE95QUdGckQyRHJyVVdtVGtLY0t5SDdrSlJzbmY2NFova1ZqaC8KQmFXL0p4eWM0RkNBSjFXMHZ6b0pSWTJpbWFCL05EcExBYXRSeUZRaUgrbXp5YUl1NVVaa0RNVnd3OXAvTUdtdAozbU9ZWnhKS2s3ZFZQR2pCQ3IvTnRzTytVU0gzNm9HU2t4cjgxelpGTC9EQVJ2VGZ2Z2l3NVpoQ2VINFc2YU55CjJOV1k1YnhoTW5TZHNjTEREQW95bTlKLwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+#     client-key-data: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBbWhORWFGVmNkOVVrRCtyN2J2RzBNRkppU2NrL2dQc05BZTJwa0wwS0lrSWNuakR5CncwUVdhL0UxZGtpTlJuYWVJck1rMk1JTVBMWjY4T1QzWmdxNm5kRWxrNHFSMEFFV2ZEclBEM2RuOWVCc1lrT1kKNkM4VEZTbDZYRDJqZ25TUStMWWYrd0ZWb0R2SUJqc3FQeWE4YVZxYklDdnNUYzIybENmdklpWHFUcFNFbS93bQpKZlQ2UE5CVFVWcDEwOXZBbldvM3BUS3IwQkE1YmduKzN2SnZUd3AxaW1id0I5ak9LN3NuRzE4SjlpdmtkM2pVClg1aWlpaWZaK2hHWlJieFdBMXJFZ3FaT2d1WHA4YzhjMVV1b3E5eTFrbGp0QU5lRkF0bzVZYkVrYzZYRjhsMTYKRU9lT2lDRXAwZnl0UVVNYlJDN3VwN3NDSkVhUjdNVEhjWVJKK1FJREFRQUJBb0lCQURwaTRNSjB6cFN1bFhyZQp2aWM5dXQydzZvUXhtam9EYU50NU40K2N3M0ZXQWtoRUhrcTJ5NVJlRkxkZEtRUXh3UjAvSzlCa1FJVGxWZE5oCndRclBPQWJFRWV4R1Q1azJRRklWYXcvZVhPd0UvcTJDRmppdVZobm4zUEdGZmlmYWluRmxldHNBbDNVZ0VsMmkKSUJGTVdZdkhCUS84OVJCS3kweDdrWmdzTEExWWpoRkUxUkd0Zk1JZDdVY1d1QVNsYVY5ZUN4NW4zT29FWUdDYQpLUldoNnB1MVE1MTdwdFBsZVpvS0xvOUFyK3NOSGxVSGxXYUFlUVY5TmNsSGNSNlJEd2RmN1gya1VzczJRRmI3ClQxMDVIWDNuK3hZSnFVOEI3a0haK2hkNVpSR2hjZzdLY0plRXp6ck44TGpxN2lFRnM1K2p0RHdUUVVpWUlFZmYKVXZrcng3RUNnWUVBeTl1dTg0VWdDS1NnUk9SSmFtM0dFdjNuMEJFMnpISE9LNnI1NkMvL0NYR1hudlBxcWlmbApqNEdTeCtXTG53eWh5REFwbXJNUE1RdlBQdWpENFRGQnlLYzBNelpQOG5uZzVrL2s5RXExV1NXVlNoUDlhaER5CmJES0tFWVdRR0hUeTdtaWZpRFEvamgwN2REckVqaDlIT3FUaVd4azFkOWZqazJFVXRYUVR2eFVDZ1lFQXdYdmcKdTdCY08yOWNZSGV2RTJ6S2NJK0J6VDNXLzFXckhwVzduaFRnYUhUSzNaR29sWCtyaHROdTdKbmZnZGNMNTc5TwpZQ2NwblUyV05DV3JmMWd3dXZBSHQ0NUUrY1lHOTQ4eTYxRURDRXU1ZDlKaGZ6TGRIYVBmYlhuR2J3TjhqWURaCjcveCtYcjF6M0t0L3EwL3JFWlQzaytEb29LMjk2WmJsak1qVWVGVUNnWUE4K2dvYnR6ODh0cGxsNGU3LzBiUUUKckVQeG5hU0poS1VKdE11cG91bWpWb0htdnNqN2VwR1Uya29nVnMzcmxpaXlLNDNXUXljUklab3RGQXk3U0RPSQpKRk5kMmlvUnVsa0dLdkd1RE1hdjBxa1VEbVNubkVnWEN3cjNjTDhJUWJzRWl2RGxHZFBFMjRPVUladjNjdTJvCllmZC9Ea3hLKzUyTDBPY1QyNU9vZlFLQmdRQ1B5MEx2K2xmeGpBZTVZZmxwbEZhM1pNL3crdDZJRU9FRjcvM3AKdEZZN0MyR2hYWmxPMGYxbVRFaUo2cW1qVTNEem9NZmN5ZjR4ZS9IL2UyZURVc1dVaU1NVGRkWnBVdlRta3pRaQprcWlRUjhiaytDT2hadW5TRjNIN2FKOUM3ZkpwTDdQSW1YeEphTDlzNXNBUlQybkNQVlhxUHlKa0YvdW1XSkR0CkdteGRxUUtCZ0RYTm52RWZKSld5bW8rTFM3US9oSmowWTV3ZEpSejVCYUloMmxUZlFVaXpLd0lzT2E2VjAyVU0KZkQ3MkdTMTBiU2s0R1QzWHYyaTRUVVc3aUlsdkxQTnRGOFZUbk1EcUR4VFQ5bnFSZlRaOGx1UytUenRLY0Z0ZgptVWRlTVU3MlM0dG51R0xRa0pBYWZtZmlJMG02SDF5bDBYci9UajBnc1RERFpnNDZEQzdRCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# echo "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMzakNDQWNhZ0F3SUJBZ0lJSExuR2tYakRvTmd3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TURBNU1Ea3lNakk1TURSYUZ3MHlNVEE1TURreU1qSTVNRGhhTUNBeApIakFjQmdOVkJBTVRGWE41YzNSbGJUcHJkV0psTFhOamFHVmtkV3hsY2pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCCkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUpvVFJHaFZYSGZWSkEvcSsyN3h0REJTWWtuSlA0RDdEUUh0cVpDOUNpSkMKSEo0dzhzTkVGbXZ4TlhaSWpVWjJuaUt6Sk5qQ0REeTJldkRrOTJZS3VwM1JKWk9La2RBQkZudzZ6dzkzWi9YZwpiR0pEbU9ndkV4VXBlbHc5bzRKMGtQaTJIL3NCVmFBN3lBWTdLajhtdkdsYW15QXI3RTNOdHBRbjd5SWw2azZVCmhKdjhKaVgwK2p6UVUxRmFkZFBid0oxcU42VXlxOUFRT1c0Si90N3liMDhLZFlwbThBZll6aXU3Snh0ZkNmWXIKNUhkNDFGK1lvb29uMmZvUm1VVzhWZ05heElLbVRvTGw2ZkhQSE5WTHFLdmN0WkpZN1FEWGhRTGFPV0d4SkhPbAp4ZkpkZWhEbmpvZ2hLZEg4clVGREcwUXU3cWU3QWlSR2tlekV4M0dFU2ZrQ0F3RUFBYU1uTUNVd0RnWURWUjBQCkFRSC9CQVFEQWdXZ01CTUdBMVVkSlFRTU1Bb0dDQ3NHQVFVRkJ3TUNNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUIKQVFCbjFqLzlucTFKb1RjOHF5cmhCZ0xtZ00yYzNGL2ZhUWJNR3JlNEl2NWZYbkdZckNrWENPdll2YnJqLzQzVQpjdENXRlQyVTN5RUVkYVFvSUg5eWhJRHdpK2dxR3B1bjF3UWV6c2F1VC9ycVhibGZ1VlhCL2dia1B3TDFkREJlCndVZ04rWmEzcDJxWFVhbTh1VXJyOEhVanZpRE95QUdGckQyRHJyVVdtVGtLY0t5SDdrSlJzbmY2NFova1ZqaC8KQmFXL0p4eWM0RkNBSjFXMHZ6b0pSWTJpbWFCL05EcExBYXRSeUZRaUgrbXp5YUl1NVVaa0RNVnd3OXAvTUdtdAozbU9ZWnhKS2s3ZFZQR2pCQ3IvTnRzTytVU0gzNm9HU2t4cjgxelpGTC9EQVJ2VGZ2Z2l3NVpoQ2VINFc2YU55CjJOV1k1YnhoTW5TZHNjTEREQW95bTlKLwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==" | base64 -d | openssl x509 -text
+# Certificate:
+#     Data:
+#         Version: 3 (0x2)
+#         Serial Number: 2069903831852097752 (0x1cb9c69178c3a0d8)
+#         Signature Algorithm: sha256WithRSAEncryption
+#         Issuer: CN = kubernetes
+#         Validity
+#             Not Before: Sep  9 22:29:04 2020 GMT
+#             Not After : Sep  9 22:29:08 2021 GMT
+#         Subject: CN = system:kube-scheduler
+#         Subject Public Key Info:
+#             Public Key Algorithm: rsaEncryption
+#                 RSA Public-Key: (2048 bit)
+#                 Modulus:
+#                     00:9a:13:44:68:55:5c:77:d5:24:0f:ea:fb:6e:f1:
+#                     b4:30:52:62:49:c9:3f:80:fb:0d:01:ed:a9:90:bd:
+#                     0a:22:42:1c:9e:30:f2:c3:44:16:6b:f1:35:76:48:
+#                     8d:46:76:9e:22:b3:24:d8:c2:0c:3c:b6:7a:f0:e4:
+#                     f7:66:0a:ba:9d:d1:25:93:8a:91:d0:01:16:7c:3a:
+#                     cf:0f:77:67:f5:e0:6c:62:43:98:e8:2f:13:15:29:
+#                     7a:5c:3d:a3:82:74:90:f8:b6:1f:fb:01:55:a0:3b:
+#                     c8:06:3b:2a:3f:26:bc:69:5a:9b:20:2b:ec:4d:cd:
+#                     b6:94:27:ef:22:25:ea:4e:94:84:9b:fc:26:25:f4:
+#                     fa:3c:d0:53:51:5a:75:d3:db:c0:9d:6a:37:a5:32:
+#                     ab:d0:10:39:6e:09:fe:de:f2:6f:4f:0a:75:8a:66:
+#                     f0:07:d8:ce:2b:bb:27:1b:5f:09:f6:2b:e4:77:78:
+#                     d4:5f:98:a2:8a:27:d9:fa:11:99:45:bc:56:03:5a:
+#                     c4:82:a6:4e:82:e5:e9:f1:cf:1c:d5:4b:a8:ab:dc:
+#                     b5:92:58:ed:00:d7:85:02:da:39:61:b1:24:73:a5:
+#                     c5:f2:5d:7a:10:e7:8e:88:21:29:d1:fc:ad:41:43:
+#                     1b:44:2e:ee:a7:bb:02:24:46:91:ec:c4:c7:71:84:
+#                     49:f9
+#                 Exponent: 65537 (0x10001)
+#         X509v3 extensions:
+#             X509v3 Key Usage: critical
+#                 Digital Signature, Key Encipherment
+#             X509v3 Extended Key Usage: 
+#                 TLS Web Client Authentication
+#     Signature Algorithm: sha256WithRSAEncryption
+#          67:d6:3f:fd:9e:ad:49:a1:37:3c:ab:2a:e1:06:02:e6:80:cd:
+#          9c:dc:5f:df:69:06:cc:1a:b7:b8:22:fe:5f:5e:71:98:ac:29:
+#          17:08:eb:d8:bd:ba:e3:ff:8d:d4:72:d0:96:15:3d:94:df:21:
+#          04:75:a4:28:20:7f:72:84:80:f0:8b:e8:2a:1a:9b:a7:d7:04:
+#          1e:ce:c6:ae:4f:fa:ea:5d:b9:5f:b9:55:c1:fe:06:e4:3f:02:
+#          f5:74:30:5e:c1:48:0d:f9:96:b7:a7:6a:97:51:a9:bc:b9:4a:
+#          eb:f0:75:23:be:20:ce:c8:01:85:ac:3d:83:ae:b5:16:99:39:
+#          0a:70:ac:87:ee:42:51:b2:77:fa:e1:9f:e4:56:38:7f:05:a5:
+#          bf:27:1c:9c:e0:50:80:27:55:b4:bf:3a:09:45:8d:a2:99:a0:
+#          7f:34:3a:4b:01:ab:51:c8:54:22:1f:e9:b3:c9:a2:2e:e5:46:
+#          64:0c:c5:70:c3:da:7f:30:69:ad:de:63:98:67:12:4a:93:b7:
+#          55:3c:68:c1:0a:bf:cd:b6:c3:be:51:21:f7:ea:81:92:93:1a:
+#          fc:d7:36:45:2f:f0:c0:46:f4:df:be:08:b0:e5:98:42:78:7e:
+#          16:e9:a3:72:d8:d5:98:e5:bc:61:32:74:9d:b1:c2:c3:0c:0a:
+#          32:9b:d2:7f
+# -----BEGIN CERTIFICATE-----
+# MIIC3jCCAcagAwIBAgIIHLnGkXjDoNgwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+# AxMKa3ViZXJuZXRlczAeFw0yMDA5MDkyMjI5MDRaFw0yMTA5MDkyMjI5MDhaMCAx
+# HjAcBgNVBAMTFXN5c3RlbTprdWJlLXNjaGVkdWxlcjCCASIwDQYJKoZIhvcNAQEB
+# BQADggEPADCCAQoCggEBAJoTRGhVXHfVJA/q+27xtDBSYknJP4D7DQHtqZC9CiJC
+# HJ4w8sNEFmvxNXZIjUZ2niKzJNjCDDy2evDk92YKup3RJZOKkdABFnw6zw93Z/Xg
+# bGJDmOgvExUpelw9o4J0kPi2H/sBVaA7yAY7Kj8mvGlamyAr7E3NtpQn7yIl6k6U
+# hJv8JiX0+jzQU1FaddPbwJ1qN6Uyq9AQOW4J/t7yb08KdYpm8AfYziu7JxtfCfYr
+# 5Hd41F+Yooon2foRmUW8VgNaxIKmToLl6fHPHNVLqKvctZJY7QDXhQLaOWGxJHOl
+# xfJdehDnjoghKdH8rUFDG0Qu7qe7AiRGkezEx3GESfkCAwEAAaMnMCUwDgYDVR0P
+# AQH/BAQDAgWgMBMGA1UdJQQMMAoGCCsGAQUFBwMCMA0GCSqGSIb3DQEBCwUAA4IB
+# AQBn1j/9nq1JoTc8qyrhBgLmgM2c3F/faQbMGre4Iv5fXnGYrCkXCOvYvbrj/43U
+# ctCWFT2U3yEEdaQoIH9yhIDwi+gqGpun1wQezsauT/rqXblfuVXB/gbkPwL1dDBe
+# wUgN+Za3p2qXUam8uUrr8HUjviDOyAGFrD2DrrUWmTkKcKyH7kJRsnf64Z/kVjh/
+# BaW/Jxyc4FCAJ1W0vzoJRY2imaB/NDpLAatRyFQiH+mzyaIu5UZkDMVww9p/MGmt
+# 3mOYZxJKk7dVPGjBCr/NtsO+USH36oGSkxr81zZFL/DARvTfvgiw5ZhCeH4W6aNy
+# 2NWY5bxhMnSdscLDDAoym9J/
+# -----END CERTIFICATE-----
+# root@worker-control-plane:/# 
+
