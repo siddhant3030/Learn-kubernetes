@@ -6,6 +6,7 @@ defmodule Typee.EncodedId do
   def cast(id) when is_integer(id) do
     {:ok, encode_id(id)}
   end
+
   def cast(_), do: :error
 
   def dump(id) when is_binary(id) do
@@ -19,6 +20,6 @@ defmodule Typee.EncodedId do
   defp encode_id(id) do
     id
     |> Integer.to_string()
-    |> Base.encode64
+    |> Base.encode64()
   end
 end
